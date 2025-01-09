@@ -7,7 +7,7 @@ import { PostgresUserRepository } from "../../../lib/User/infrastructure/Postgre
 import { env } from "./env";
 import { InMemoryUserRepository } from "../../../lib/User/infrastructure/InMemoryUserRepository";
 
-const userRepository = new InMemoryUserRepository();
+const userRepository = new PostgresUserRepository(env.DATABASE_URL);
 
 export const ServiceContainer = {
   user: {

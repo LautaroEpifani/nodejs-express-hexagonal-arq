@@ -22,14 +22,12 @@ export class ExpressUserController {
 
   async create(req: Request, res: Response, next: NextFunction) {
     try {
-      const { createdAt, email, id, name } = req.body as {
-        id: string;
+      const { createdAt, email, name } = req.body as {
         name: string;
         email: string;
         createdAt: string;
       };
       await ServiceContainer.user.create.run(
-        id,
         name,
         email,
         new Date(createdAt)
