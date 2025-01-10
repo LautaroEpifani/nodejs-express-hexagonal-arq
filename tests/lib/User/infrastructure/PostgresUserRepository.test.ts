@@ -64,7 +64,7 @@ describe("PostgresUserRepository should", () => {
     await repository.delete(user.id);
   });
 
-  it("edit", async () => {
+  it("update", async () => {
     const repository = new PostgresUserRepository(DATABASE_URL);
 
     const user = UserStub.create();
@@ -74,7 +74,7 @@ describe("PostgresUserRepository should", () => {
     const newUser = UserStub.create();
     newUser.id = user.id;
 
-    await repository.edit(newUser);
+    await repository.update(newUser);
 
     const findedUser = await repository.getOneById(user.id);
 

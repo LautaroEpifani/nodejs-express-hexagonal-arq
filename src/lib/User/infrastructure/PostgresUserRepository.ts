@@ -58,7 +58,7 @@ export class PostgresUserRepository implements UserRepository {
     return this.mapToDomain(row);
   }
 
-  async edit(user: User): Promise<void> {
+  async update(user: User): Promise<void> {
     const query = {
       text: "UPDATE users SET name = $1, email = $2 WHERE id = $3",
       values: [user.name.value, user.email.value, user.id.value],

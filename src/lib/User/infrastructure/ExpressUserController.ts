@@ -27,11 +27,7 @@ export class ExpressUserController {
         email: string;
         createdAt: string;
       };
-      await ServiceContainer.user.create.run(
-        name,
-        email,
-        new Date(createdAt)
-      );
+      await ServiceContainer.user.create.run(name, email, new Date(createdAt));
 
       return res.status(201).send();
     } catch (error) {
@@ -39,16 +35,16 @@ export class ExpressUserController {
     }
   }
 
-  async edit(req: Request, res: Response, next: NextFunction) {
+  async update(req: Request, res: Response, next: NextFunction) {
+    console.log(req)
     try {
-      const { createdAt, email, id, name } = req.body as {
-        id: string;
+      const { createdAt, email, name } = req.body as {
         name: string;
         email: string;
         createdAt: string;
       };
-      await ServiceContainer.user.edit.run(
-        id,
+      await ServiceContainer.user.update.run(
+        req.params.id,
         name,
         email,
         new Date(createdAt)

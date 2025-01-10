@@ -14,7 +14,7 @@ export class InMemoryUserRepository implements UserRepository {
   async getOneById(id: UserId) {
     return this.users.find((user) => user.id.value === id.value) ?? null;
   }
-  async edit(user: User) {
+  async update(user: User) {
     const index = this.users.findIndex((u) => u.id.value === user.id.value);
     if (index === -1) {
       throw new Error("User not found");
