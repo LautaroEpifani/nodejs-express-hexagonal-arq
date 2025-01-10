@@ -1,13 +1,13 @@
-import { UserEdit } from "src/lib/User/application/UserEdit/UserEdit";
+import { UserUpdate } from "../../../../../src/lib/User/application/UserUpdate/UserUpdate";
 import { InMemoryUserRepository } from "../../__mocks__/InMemoryUserRepository";
 import { UserStub } from "../../domain/UserStub";
 
-describe("UserEdit should", () => {
-  test("edit a user", async () => {
+describe("UserUpdate should", () => {
+  test("update a user", async () => {
     const user = UserStub.create();
 
     const repository = new InMemoryUserRepository([user]);
-    const editUseCase = new UserEdit(repository);
+    const updateUseCase = new UserUpdate(repository);
 
     const usersBefore = await repository.getAll();
 
@@ -18,16 +18,16 @@ describe("UserEdit should", () => {
     const newName = newUser.name.value;
     const newEmail = newUser.email.value;
 
-    await editUseCase.run(user.id.value, newName, newEmail, new Date());
+    await updateUseCase.run(user.id.value, newName, newEmail, new Date());
 
     const usersAfter = await repository.getAll();
 
     expect(usersAfter).toHaveLength(1);
 
-    const editedUser = usersAfter[0];
+    const updatedUser = usersAfter[0];
 
-    expect(editedUser.id.value).toBe(user.id.value);
-    expect(editedUser.name.value).toBe(newName);
-    expect(editedUser.email.value).toBe(newEmail);
+    expect(updatedUser.id.value).toBe(user.id.value);
+    expect(updatedUser.name.value).toBe(newName);
+    expect(updatedUser.email.value).toBe(newEmail);
   });
 });

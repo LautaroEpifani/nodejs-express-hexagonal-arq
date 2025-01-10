@@ -1,7 +1,8 @@
 import * as express from "express";
 import { Request, Response, NextFunction } from "express";
 import { ExpressUserRouter } from "./lib/User/infrastructure/ExpressUserRouter";
-import { CustomError, ValidationError } from "./lib/Shared/errors/CustomError";
+import { ValidationError } from "./lib/Shared/errors/ValidatorError";
+import { CustomError } from "./lib/Shared/errors/CustomError";
 
 const app = express();
 
