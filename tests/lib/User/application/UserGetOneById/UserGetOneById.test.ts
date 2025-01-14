@@ -1,11 +1,12 @@
-import { UserGetOneById } from "src/lib/User/application/UserGetOneById/UserGetOneById";
+import { UserGetOneById } from "../../../../../src/lib/User/application/UserGetOneById/UserGetOneById";
 import { InMemoryUserRepository } from "../../__mocks__/InMemoryUserRepository";
 import { UserStub } from "../../domain/UserStub";
+import { randUuid } from "@ngneat/falso";
 
 describe("UserGetOneById should", () => {
   test("return a user", async () => {
     const user = UserStub.create();
-
+    
     const repository = new InMemoryUserRepository([user]);
     const useCase = new UserGetOneById(repository);
 
@@ -22,7 +23,7 @@ describe("UserGetOneById should", () => {
     const useCase = new UserGetOneById(repository);
 
     try {
-      await useCase.run("invalid-id");
+      await useCase.run(randUuid());
     } catch (error) {
       const { message } = error as Error;
       expect(message).toBe("User not found");
