@@ -1,12 +1,13 @@
-import { User } from "src/lib/User/domain/User";
-import { UserId } from "src/lib/User/domain/UserId";
-import { UserRepository } from "src/lib/User/domain/UserRepository";
+import { User } from "../../../../src/lib/User/domain/User";
+import { UserId } from "../../../../src/lib/User/domain/UserId";
+import { UserRepository } from "../../../../src/lib/User/domain/UserRepository";
 
 export class InMemoryUserRepository implements UserRepository {
   constructor(private readonly users: User[] = []) {}
 
   async create(user: User) {
     this.users.push(user);
+    return user.id.value;
   }
   async getAll() {
     return this.users;

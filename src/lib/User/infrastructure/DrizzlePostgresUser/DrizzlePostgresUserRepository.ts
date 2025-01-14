@@ -17,14 +17,13 @@ type DrizzlePostgresUser = {
 
 export class DrizzlePostgresUserRepository implements UserRepository {
   private db;
+
   constructor(databaseUrl: string) {
     this.db = drizzle(databaseUrl);
   }
 
   getAll = async (): Promise<User[]> => {
     const result = await this.db.select().from(users);
-    console.log(result);
-
     return result.map((item) => this.mapToDomain(item));
   };
 
@@ -44,7 +43,7 @@ export class DrizzlePostgresUserRepository implements UserRepository {
     return this.mapToDomain(userFound);
   };
 
-  create = async (user: User): Promise<void> => {
+  create = async (user: User): Promise<string> => {
     const dbUser = {
       id: user.id.value,
       name: user.name.value,
@@ -52,7 +51,16 @@ export class DrizzlePostgresUserRepository implements UserRepository {
       createdAt: user.createdAt.format(),
     };
 
-    await this.db.insert(users).values(dbUser);
+    const [insertedUser] = await this.db
+      .insert(users)
+      .values(dbUser)
+      .returning({ id: users.id });
+
+    if (!insertedUser) {
+      throw new Error("Failed to insert user");
+    }
+
+    return insertedUser.id;
   };
 
   update = async (user: User): Promise<void> => {
