@@ -1,4 +1,4 @@
-import { ZodSchema } from "zod";
+import { ZodSchema, ZodError } from "zod";
 import { ValidationError } from "../errors/ValidatorError";
 
 export class Validator<T> {

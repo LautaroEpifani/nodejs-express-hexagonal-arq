@@ -13,7 +13,7 @@ export class UserCreate {
 
   constructor(private repository: UserRepository) {}
 
-  async run(name: string, email: string, createdAt: Date): Promise<string> {
+  async run(name: string, email: string, createdAt: Date): Promise<void> {
     const id = uuidv4();
     const parsed = this.validator.validate({ id, name, email, createdAt });
 
@@ -24,8 +24,6 @@ export class UserCreate {
       new UserCreatedAt(parsed.createdAt)
     );
 
-    const userId = await this.repository.create(user);
-
-    return userId;
+    return this.repository.create(user);
   }
 }

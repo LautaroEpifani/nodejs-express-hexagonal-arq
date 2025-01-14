@@ -1,31 +1,20 @@
+import { PostgresUserRepository } from "src/lib/User/infrastructure/PostgresUserRepository";
+
 import * as dotenv from "dotenv";
 import { UserStub } from "../domain/UserStub";
-import { DrizzlePostgresUserRepository } from "../../../../src/lib/User/infrastructure/DrizzlePostgresUser/DrizzlePostgresUserRepository";
-import { TestRespository } from "../utils/TestRepository";
 
 dotenv.config();
 
-const DATABASE_URL = process.env.DATABASE_URL_TEST;
+const DATABASE_URL = process.env.DATABASE_URL;
 
 if (!DATABASE_URL) {
   throw new Error("DATABASE_URL is not set");
 }
 
-describe("DrizzlePostgresUserRepository should", () => {
-  let repository: DrizzlePostgresUserRepository;
-  let testRepository: TestRespository;
-
-  beforeEach(async () => {
-    repository = new DrizzlePostgresUserRepository(DATABASE_URL);
-    testRepository = new TestRespository(DATABASE_URL); // only for delete tested data.
-    await testRepository.deleteAll();
-  });
-
-  afterEach(async () => {
-    await testRepository.deleteAll();
-  });
-
+describe("PostgresUserRepository should", () => {
   it("create", async () => {
+    const repository = new PostgresUserRepository(DATABASE_URL);
+
     const user = UserStub.create();
 
     await repository.create(user);
@@ -38,9 +27,12 @@ describe("DrizzlePostgresUserRepository should", () => {
     expect(findedUser?.name.value).toBe(user.name.value);
     expect(findedUser?.email.value).toBe(user.email.value);
 
+    await repository.delete(user.id);
   });
 
   it("get all", async () => {
+    const repository = new PostgresUserRepository(DATABASE_URL);
+
     const user = UserStub.create();
     const user2 = UserStub.create();
 
@@ -51,9 +43,13 @@ describe("DrizzlePostgresUserRepository should", () => {
 
     expect(users.length).toBeGreaterThanOrEqual(2);
 
+    await repository.delete(user.id);
+    await repository.delete(user2.id);
   });
 
   it("get one by id", async () => {
+    const repository = new PostgresUserRepository(DATABASE_URL);
+
     const user = UserStub.create();
 
     await repository.create(user);
@@ -65,25 +61,34 @@ describe("DrizzlePostgresUserRepository should", () => {
     expect(userFound?.name.value).toBe(user.name.value);
     expect(userFound?.email.value).toBe(user.email.value);
 
+    await repository.delete(user.id);
   });
 
   it("update", async () => {
+    const repository = new PostgresUserRepository(DATABASE_URL);
+
     const user = UserStub.create();
+
     await repository.create(user);
 
-    const updatedUser = UserStub.update("New Name", user);
+    const newUser = UserStub.create();
+    newUser.id = user.id;
 
-    await repository.update(updatedUser);
+    await repository.update(newUser);
 
     const findedUser = await repository.getOneById(user.id);
 
     expect(findedUser).not.toBeNull();
-    expect(findedUser?.id.value).toBe(user.id.value);
-    expect(findedUser?.name.value).toBe("New Name");
-    expect(findedUser?.email.value).toBe(user.email.value);
+    expect(findedUser?.id.value).toBe(newUser.id.value);
+    expect(findedUser?.name.value).toBe(newUser.name.value);
+    expect(findedUser?.email.value).toBe(newUser.email.value);
+
+    await repository.delete(user.id);
   });
 
   it("delete", async () => {
+    const repository = new PostgresUserRepository(DATABASE_URL);
+
     const user = UserStub.create();
 
     await repository.create(user);

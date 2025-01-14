@@ -23,7 +23,7 @@ export class UserUpdate {
       new UserId(parsed.id),
       new UserName(parsed.name),
       new UserEmail(parsed.email),
-      new UserCreatedAt(parsed.createdAt as Date)
+      new UserCreatedAt(parsed.createdAt)
     );
 
 
