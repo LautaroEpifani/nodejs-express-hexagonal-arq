@@ -3,12 +3,10 @@ import { UserGetOneById } from "../../User/application/UserGetOneById/UserGetOne
 import { UserCreate } from "../../User/application/UserCreate/UserCreate";
 import { UserUpdate } from "../../User/application/UserUpdate/UserUpdate";
 import { UserDelete } from "../../User/application/UserDelete/UserDelete";
-import { PostgresUserRepository } from "../../../lib/User/infrastructure/PostgresUserRepository";
-import { env } from "./env";
-import { InMemoryUserRepository } from "../../../lib/User/infrastructure/InMemoryUserRepository";
 import { DrizzlePostgresUserRepository } from "../../../lib/User/infrastructure/DrizzlePostgresUser/DrizzlePostgresUserRepository";
+import dbConfig from "./env";
 
-const userRepository = new DrizzlePostgresUserRepository(env.DATABASE_URL);
+const userRepository = new DrizzlePostgresUserRepository(dbConfig.DATABASE_URL!);
 
 export const ServiceContainer = {
   user: {
