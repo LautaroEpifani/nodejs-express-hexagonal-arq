@@ -1,9 +1,10 @@
 import { UserId } from "../../../../src/lib/User/domain/UserId";
 import { User } from "../../../../src/lib/User/domain/User";
-import { randEmail, randFirstName, randUuid } from "@ngneat/falso";
+import { randEmail, randFirstName, randPassword, randUuid } from "@ngneat/falso";
 import { UserName } from "../../../../src/lib/User/domain/UserName";
 import { UserCreatedAt } from "../../../../src/lib/User/domain/UserCreatedAt";
 import { UserEmail } from "../../../../src/lib/User/domain/UserEmail";
+import { UserPassword } from "../../../../src/lib/User/domain/UserPassword";
 
 export class UserStub {
 
@@ -13,6 +14,7 @@ export class UserStub {
       new UserName(randFirstName()),
       new UserEmail(randEmail()),
       new UserCreatedAt(new Date()),
+      new UserPassword(randPassword()),
     );
   }
 
@@ -21,7 +23,7 @@ export class UserStub {
         user.id, 
         new UserName(newName), 
         user.email, 
-        user.createdAt 
+        user.createdAt,
     );
 }
 }

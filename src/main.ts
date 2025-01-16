@@ -1,12 +1,15 @@
-import * as express from "express";
+import express from "express";
 import { Request, Response, NextFunction } from "express";
 import { ExpressUserRouter } from "./lib/User/infrastructure/ExpressUserRouter";
 import { ValidationError } from "./lib/Shared/errors/ValidatorError";
 import { CustomError } from "./lib/Shared/errors/CustomError";
+import cookieParser from 'cookie-parser';
 
 const app = express();
 
+app.use(cookieParser());
 app.use(express.json());
+
 
 app.use(ExpressUserRouter);
 

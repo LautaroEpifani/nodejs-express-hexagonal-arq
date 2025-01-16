@@ -1,12 +1,14 @@
 import { User } from "../domain/User";
+import { UserEmail } from "../domain/UserEmail";
 import { UserId } from "../domain/UserId";
 import { UserRepository } from "../domain/UserRepository";
 
 export class InMemoryUserRepository implements UserRepository {
   private users: User[] = [];
 
-  async create(user: User): Promise<void> {
+  async create(user: User): Promise<string> {
     this.users.push(user);
+    return user.id.value;
   }
 
   async getAll(): Promise<User[]> {
@@ -15,6 +17,10 @@ export class InMemoryUserRepository implements UserRepository {
 
   async getOneById(id: UserId): Promise<User | null> {
     return this.users.find((user) => user.id.value === id.value) || null;
+  }
+
+  async findByEmail(email: UserEmail): Promise<User | null> {
+    return this.users.find((user) => user.email.value === email.value) || null;
   }
 
   async update(user: User): Promise<void> {

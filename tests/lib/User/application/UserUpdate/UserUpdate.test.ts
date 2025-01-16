@@ -18,7 +18,7 @@ describe("UserUpdate should", () => {
     const newName = newUser.name.value;
     const newEmail = newUser.email.value;
 
-    await updateUseCase.run(user.id.value, newName, newEmail, new Date());
+    await updateUseCase.run(user.id.value, newName, newEmail, newUser.createdAt.value, newUser.password?.value);
 
     const usersAfter = await repository.getAll();
 

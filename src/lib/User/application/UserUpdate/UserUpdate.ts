@@ -1,4 +1,7 @@
-import { UserNotFoundError } from "../../../Shared/errors/CustomError";
+import {
+  CustomError,
+  UserNotFoundError,
+} from "../../../Shared/errors/CustomError";
 import { User } from "../../domain/User";
 import { UserCreatedAt } from "../../domain/UserCreatedAt";
 import { UserEmail } from "../../domain/UserEmail";
@@ -7,6 +10,7 @@ import { UserName } from "../../domain/UserName";
 import { UserRepository } from "../../domain/UserRepository";
 import { Validator } from "../../../Shared/validators/ZodValidator";
 import { UserSchema } from "../../../Shared/schemas/UserSchema";
+import { UserPassword } from "../../domain/UserPassword";
 
 export class UserUpdate {
   private validator = new Validator(UserSchema);
@@ -16,17 +20,22 @@ export class UserUpdate {
     id: string,
     name: string,
     email: string,
-    createdAt: Date
+    createdAt: Date,
+    password?: string
   ): Promise<void> {
-    const parsed = this.validator.validate({ id, name, email, createdAt });
+    const parsed = this.validator.validate({
+      id,
+      name,
+      email,
+      createdAt,
+      password,
+    });
     const user = new User(
       new UserId(parsed.id),
       new UserName(parsed.name),
       new UserEmail(parsed.email),
-      new UserCreatedAt(parsed.createdAt as Date)
+      new UserCreatedAt(parsed.createdAt)
     );
-
-
     const userExists = await this.repository.getOneById(user.id);
 
     if (!userExists) throw new UserNotFoundError();

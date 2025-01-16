@@ -22,12 +22,17 @@ export class ExpressUserController {
 
   async create(req: Request, res: Response, next: NextFunction) {
     try {
-      const { name, email, createdAt } = req.body as {
+      const { name, email, password } = req.body as {
         name: string;
         email: string;
-        createdAt: string;
+        password: string;
       };
-      const userId = await ServiceContainer.user.create.run(name, email, new Date(createdAt));
+      const userId = await ServiceContainer.user.create.run(
+        name,
+        email,
+        new Date(),
+        password
+      );
       return res.status(201).json({ id: userId });
     } catch (error) {
       next(error);
@@ -36,16 +41,18 @@ export class ExpressUserController {
 
   async update(req: Request, res: Response, next: NextFunction) {
     try {
-      const { createdAt, email, name } = req.body as {
+      const { name, email, createdAt, password } = req.body as {
         name: string;
         email: string;
         createdAt: string;
+        password: string;
       };
       await ServiceContainer.user.update.run(
         req.params.id,
         name,
         email,
-        new Date(createdAt)
+        new Date(createdAt),
+        password
       );
 
       return res.status(204).send();

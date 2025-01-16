@@ -1,4 +1,5 @@
 import { User } from "../../../../src/lib/User/domain/User";
+import { UserEmail } from "../../../../src/lib/User/domain/UserEmail";
 import { UserId } from "../../../../src/lib/User/domain/UserId";
 import { UserRepository } from "../../../../src/lib/User/domain/UserRepository";
 
@@ -14,6 +15,9 @@ export class InMemoryUserRepository implements UserRepository {
   }
   async getOneById(id: UserId) {
     return this.users.find((user) => user.id.value === id.value) ?? null;
+  }
+  async findByEmail(email: UserEmail) {
+    return this.users.find((user) => user.email.value === email.value) ?? null;
   }
   async update(user: User) {
     const index = this.users.findIndex((u) => u.id.value === user.id.value);
