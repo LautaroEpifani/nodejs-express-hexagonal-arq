@@ -1,4 +1,4 @@
-import * as dotenv from "dotenv";
+import dotenv from "dotenv";
 import { UserStub } from "../domain/UserStub";
 import { DrizzlePostgresUserRepository } from "../../../../src/lib/User/infrastructure/DrizzlePostgresUser/DrizzlePostgresUserRepository";
 import { TestRespository } from "../utils/TestRepository";

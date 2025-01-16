@@ -28,20 +28,26 @@ export class DrizzlePostgresUserRepository implements UserRepository {
   };
 
   getOneById = async (id: UserId): Promise<User | null> => {
-    const userFoundData = await this.db
+    const [userFound] = await this.db
       .select()
       .from(users)
-      .where(eq(users.id, id.value))
-      .limit(1);
+      .where(eq(users.id, id.value));
 
-    if (userFoundData.length === 0) {
-      return null;
-    }
-
-    const userFound = userFoundData[0];
+    if (!userFound) return null;
 
     return this.mapToDomain(userFound);
   };
+
+  async findByEmail(email: UserEmail): Promise<User | null> {
+    const [userFound] = await this.db
+      .select()
+      .from(users)
+      .where(eq(users.email, email.value));
+
+    if (!userFound) return null;
+
+    return this.mapToDomain(userFound);
+  }
 
   create = async (user: User): Promise<string> => {
     const dbUser = {
@@ -49,6 +55,7 @@ export class DrizzlePostgresUserRepository implements UserRepository {
       name: user.name.value,
       email: user.email.value,
       createdAt: user.createdAt.format(),
+      password: user.password?.value,
     };
 
     const [insertedUser] = await this.db
@@ -68,6 +75,7 @@ export class DrizzlePostgresUserRepository implements UserRepository {
       name: user.name.value,
       email: user.email.value,
       createdAt: user.createdAt.format(),
+      password: user.password?.value,
     };
 
     await this.db.update(users).set(dbUser).where(eq(users.id, user.id.value));

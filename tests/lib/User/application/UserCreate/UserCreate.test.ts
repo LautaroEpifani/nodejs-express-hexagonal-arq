@@ -12,6 +12,7 @@ describe("UserCreate should", () => {
       user.name.value,
       user.email.value,
       user.createdAt.value,
+      user.password?.value,
     );
 
     const users = await repository.getAll();

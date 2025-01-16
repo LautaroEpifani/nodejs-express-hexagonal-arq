@@ -1,5 +1,5 @@
-import * as request from "supertest";
-import * as express from "express";
+import request from "supertest";
+import express from "express";
 import { ExpressUserRouter } from "../../../../src/lib/User/infrastructure/ExpressUserRouter";
 import { UserStub } from "../domain/UserStub";
 
@@ -22,6 +22,7 @@ describe("ExpressUserRouter should", () => {
       name: user1.name.value,
       email: user1.email.value,
       createdAt: user1.createdAt.format(),
+      password: user1.password?.value
     });
     expect(response1.status).toBe(201);
     user1Id = response1.body.id;
@@ -30,6 +31,7 @@ describe("ExpressUserRouter should", () => {
       name: user2.name.value,
       email: user2.email.value,
       createdAt: user2.createdAt.format(),
+      password: user1.password?.value
     });
     expect(response2.status).toBe(201);
     user2Id = response2.body.id;
@@ -76,6 +78,7 @@ describe("ExpressUserRouter should", () => {
       name: user.name.value,
       email: user.email.value,
       createdAt: user.createdAt.format(),
+      password: user.password?.value
     });
 
     expect(responseOfCreation.status).toBe(201);
@@ -92,6 +95,7 @@ describe("ExpressUserRouter should", () => {
       name: user.name.value,
       email: user.email.value,
       createdAt: user.createdAt.format(),
+      password: user.password?.value
     });
 
     expect(responseOfCreation.status).toBe(201);
@@ -103,6 +107,7 @@ describe("ExpressUserRouter should", () => {
       name: updatedUser.name.value,
       email: updatedUser.email.value,
       createdAt: updatedUser.createdAt.format(),
+      password: user.password?.value
     });
 
     expect(response.status).toBe(204);
@@ -118,6 +123,7 @@ describe("ExpressUserRouter should", () => {
       name: user.name.value,
       email: user.email.value,
       createdAt: user.createdAt.format(),
+      password: user.password?.value
     });
 
     expect(responseOfCreation.status).toBe(201);
