@@ -3,17 +3,16 @@ import { ServiceContainer } from "../../Shared/infrastructure/ServiceContainer";
 
 export class AuthController {
   async register(req: Request, res: Response, next: NextFunction) {
-    const { userName, email, password, createdAt } = req.body as {
+    const { userName, email, password } = req.body as {
       userName: string;
       email: string;
       password: string;
-      createdAt: string;
     };
     try {
       const newUserId = await ServiceContainer.user.create.run(
         userName,
         email,
-        new Date(createdAt),
+        new Date(),
         password
       );
       const { token } = await ServiceContainer.auth.register.execute(newUserId);
@@ -23,6 +22,7 @@ export class AuthController {
         sameSite: "none",
         secure: true,
       });
+      res.send(token);
     } catch (error) {
       next(error);
     }
@@ -31,7 +31,7 @@ export class AuthController {
     const { email, password } = req.body;
     try {
       const user = await ServiceContainer.user.findByEmail.run(email);
-      const { token, userName } = await ServiceContainer.auth.login.execute(
+      const { token } = await ServiceContainer.auth.login.execute(
         user,
         password
       );
@@ -41,7 +41,7 @@ export class AuthController {
         sameSite: "none",
         secure: true,
       });
-      res.send(userName);
+      res.send(token);
     } catch (error) {
       next(error);
     }

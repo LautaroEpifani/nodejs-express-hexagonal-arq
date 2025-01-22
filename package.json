@@ -36,7 +36,8 @@
     "start": "node dist/main.js",
     "build": "npx tsc ./src/main.ts --outDir ./dist/ --module commonjs --target es6",
     "dev": "npx ts-node ./src/main.ts",
-    "test": "cross-env NODE_ENV=test jest"
+    "test": "cross-env NODE_ENV=test jest",
+    "drizzle-pull": "npx drizzle-kit pull --config ./src/lib/User/infrastructure/DrizzlePostgresUser/drizzle.config.ts"
   },
   "keywords": [],
   "author": "",

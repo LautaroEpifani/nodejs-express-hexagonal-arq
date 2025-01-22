@@ -7,11 +7,13 @@ import { UserEmail } from "../../domain/UserEmail";
 import { UserCreatedAt } from "../../domain/UserCreatedAt";
 import { drizzle } from "drizzle-orm/node-postgres";
 import { eq } from "drizzle-orm";
+import { UserPassword } from "../../domain/UserPassword";
 
 type DrizzlePostgresUser = {
   id: string;
-  name: string;
+  userName: string;
   email: string;
+  password: string;
   createdAt: string;
 };
 
@@ -52,10 +54,10 @@ export class DrizzlePostgresUserRepository implements UserRepository {
   create = async (user: User): Promise<string> => {
     const dbUser = {
       id: user.id.value,
-      name: user.name.value,
+      userName: user.name.value,
       email: user.email.value,
       createdAt: user.createdAt.format(),
-      password: user.password?.value,
+      password: user.password?.value || " ",
     };
 
     const [insertedUser] = await this.db
@@ -72,7 +74,7 @@ export class DrizzlePostgresUserRepository implements UserRepository {
 
   update = async (user: User): Promise<void> => {
     const dbUser = {
-      name: user.name.value,
+      userName: user.name.value,
       email: user.email.value,
       createdAt: user.createdAt.format(),
       password: user.password?.value,
@@ -88,9 +90,10 @@ export class DrizzlePostgresUserRepository implements UserRepository {
   private mapToDomain(user: DrizzlePostgresUser): User {
     return new User(
       new UserId(user.id),
-      new UserName(user.name),
+      new UserName(user.userName),
       new UserEmail(user.email),
-      new UserCreatedAt(new Date(user.createdAt))
+      new UserCreatedAt(new Date(user.createdAt)),
+      new UserPassword(user.password),
     );
   }
 }
