@@ -10,6 +10,7 @@ export class UserGetByEmail {
   constructor(private repository: UserRepository) {}
 
   async run(email: string): Promise<User> {
+    
     const parsed = this.validator.validate({ email });
     const userEmail = new UserEmail(parsed.email);
     const user = await this.repository.findByEmail(userEmail);

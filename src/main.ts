@@ -3,21 +3,22 @@ import { Request, Response, NextFunction } from "express";
 import { ExpressUserRouter } from "./lib/User/infrastructure/ExpressUserRouter";
 import { ValidationError } from "./lib/Shared/errors/ValidatorError";
 import { CustomError } from "./lib/Shared/errors/CustomError";
-import cookieParser from 'cookie-parser';
+import cookieParser from "cookie-parser";
+import { AuthRouter } from "./lib/Auth/infrastructure/AuthRouter";
 
 const app = express();
 
 app.use(cookieParser());
 app.use(express.json());
 
-
 app.use(ExpressUserRouter);
+app.use(AuthRouter);
 
 app.use((err: unknown, req: Request, res: Response, next: NextFunction) => {
   if (err instanceof ValidationError) {
     return res.status(err.statusCode).json({
       message: err.message,
-        errors: err.errors,
+      errors: err.errors,
     });
   }
 

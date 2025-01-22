@@ -1,6 +1,5 @@
 import { AuthJwtService } from "../../Shared/infrastructure/AuthJwtService";
 import { AuthBcryptService } from "../../Shared/infrastructure/AuthBcryptService";
-import { DrizzlePostgresUserRepository } from "../../../lib/User/infrastructure/DrizzlePostgresUser/DrizzlePostgresUserRepository";
 import { CustomError } from "../../../lib/Shared/errors/CustomError";
 import { AuthToken } from "../domain/AuthToken";
 import { User } from "src/lib/User/domain/User";
@@ -30,8 +29,8 @@ export class LoginUseCase {
     }
 
     const isValidPassword = await this.authBcryptService.comparePassword(
-      password,
-      user.password.value
+      user.password.value,
+      password
     );
     if (!isValidPassword) {
       throw new CustomError("Invalid credentials", 401, "UNAUTHORIZED");

@@ -4,10 +4,11 @@ import { sql } from "drizzle-orm"
 
 
 export const users = pgTable("users", {
-	id: uuid().defaultRandom().primaryKey().notNull(),
-	name: varchar({ length: 255 }).notNull(),
+	id: uuid().primaryKey().notNull(),
+	userName: varchar("user_name", { length: 255 }).notNull(),
 	email: varchar({ length: 255 }).notNull(),
-	createdAt: timestamp("created_at", { mode: 'string' }).default(sql`CURRENT_TIMESTAMP`).notNull(),
+	password: varchar({ length: 255 }).notNull(),
+	createdAt: timestamp("created_at", { withTimezone: true, mode: 'string' }).notNull(),
 }, (table) => [
 	unique("users_email_key").on(table.email),
 ]);
