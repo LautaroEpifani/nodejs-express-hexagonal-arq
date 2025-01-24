@@ -9,20 +9,18 @@ export class AuthController {
       password: string;
     };
     try {
-      const newUserId = await ServiceContainer.user.create.run(
+      const { token } = await ServiceContainer.auth.register().execute(
         userName,
         email,
-        new Date(),
         password
       );
-      const { token } = await ServiceContainer.auth.register.execute(newUserId);
       res.cookie("access_token", token, {
         httpOnly: true,
         maxAge: 60 * 60 * 24 * 1000,
         sameSite: "none",
         secure: true,
       });
-      res.send(token);
+      res.send({ token, userName });
     } catch (error) {
       next(error);
     }
@@ -31,7 +29,7 @@ export class AuthController {
     const { email, password } = req.body;
     try {
       const user = await ServiceContainer.user.findByEmail.run(email);
-      const { token } = await ServiceContainer.auth.login.execute(
+      const { token, userName } = await ServiceContainer.auth.login.execute(
         user,
         password
       );
@@ -41,7 +39,7 @@ export class AuthController {
         sameSite: "none",
         secure: true,
       });
-      res.send(token);
+      res.send({ token, userName });
     } catch (error) {
       next(error);
     }

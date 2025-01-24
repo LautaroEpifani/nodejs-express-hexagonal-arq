@@ -6,11 +6,12 @@ import { UserUpdate } from "../../User/application/UserUpdate/UserUpdate";
 import { UserDelete } from "../../User/application/UserDelete/UserDelete";
 import { DrizzlePostgresUserRepository } from "../../../lib/User/infrastructure/DrizzlePostgresUser/DrizzlePostgresUserRepository";
 import dbConfig from "./env";
-import { RegisterUseCase } from "../../../lib/Auth/application/Register";
+import { RegisterUseCase } from "../../Auth/application/RegisterUseCase";
 import { LoginUseCase } from "../../../lib/Auth/application/Login";
 import { LogoutUseCase } from "../../../lib/Auth/application/Logout";
 import { AuthJwtService } from "./AuthJwtService";
 import { AuthBcryptService } from "./AuthBcryptService";
+
 
 const userRepository = new DrizzlePostgresUserRepository(
   dbConfig.DATABASE_URL!
@@ -28,7 +29,7 @@ export const ServiceContainer = {
     delete: new UserDelete(userRepository),
   },
   auth: {
-    register: new RegisterUseCase(authJwtService),
+    register: () => new RegisterUseCase(authJwtService),
     login: new LoginUseCase(authJwtService, authBcryptService),
     logout: new LogoutUseCase(),
   },
