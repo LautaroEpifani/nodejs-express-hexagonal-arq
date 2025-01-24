@@ -1,19 +1,24 @@
 import jwt from 'jsonwebtoken';
-
+import { AuthToken } from '../../../lib/Auth/domain/AuthToken';
+import { CustomError } from '../errors/CustomError';
 export class AuthJwtService {
   private secretKey: string = process.env.JWT_SECRET_KEY || 'your-secret-key';
 
   async generateToken(userId: string): Promise<string> {
     const payload = { userId };
-    return jwt.sign(payload, this.secretKey, { expiresIn: '1h' });
+    const getToken = new AuthToken(jwt.sign(payload, this.secretKey, { expiresIn: '1h' }));
+    const token = getToken.getToken();
+    return token;
   }
 
-  async verifyToken(token: string): Promise<any> {
+  async verifyToken(token: string): Promise<{ userId: string }> {
     try {
-      return jwt.verify(token, this.secretKey);
+      const decoded = jwt.verify(token, this.secretKey) as { userId: string };
+      return decoded;
     } catch (error) {
-      throw new Error('Invalid or expired token');
+      throw new CustomError('Invalid or expired token', 401, 'TOKEN_INVALID');
     }
   }
 }
+
 

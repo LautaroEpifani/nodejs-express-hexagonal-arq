@@ -19,7 +19,7 @@ export class LoginUseCase {
   async execute(
     user: User,
     password: string
-  ): Promise<{ token: AuthToken; userName: string }> {
+  ): Promise<{ token: string; userName: string }> {
     if (!user || !user.password) {
       throw new CustomError(
         "Email or password incorrect",
@@ -29,16 +29,14 @@ export class LoginUseCase {
     }
 
     const isValidPassword = await this.authBcryptService.comparePassword(
+      password,
       user.password.value,
-      password
     );
     if (!isValidPassword) {
       throw new CustomError("Invalid credentials", 401, "UNAUTHORIZED");
     }
 
-    const jwt = await this.authJwtService.generateToken(user.id.value);
-
-    const token = new AuthToken(jwt);
+    const token = await this.authJwtService.generateToken(user.id.value);
 
     return { token, userName: user.name.value };
   }
